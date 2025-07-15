@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Search from "./components/Search";
 import { API_OPTIONS, getUrl } from "./utils/helper";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,7 +54,9 @@ function App() {
         <section className="all-movies">
           <h2>All movies</h2>
           {isLoading ? (
-            <p className="text-white">Loading...</p>
+            <p className="text-white">
+              <LoadingSpinner />
+            </p>
           ) : errorMsg ? (
             <p className="text-red-500">{errorMsg}</p>
           ) : (
