@@ -9,8 +9,11 @@ export const API_OPTIONS = {
   },
 };
 
-export const getUrl = () => {
-  return `${API_BASE_URL}/discover/movie?sory_by=popularity.desc`;
+export const getUrl = (query: string) => {
+  const baseUrl = query
+    ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+    : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+  return baseUrl;
 };
 
 export const getPosterBaseURL = () => {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import LoadingSpinner from "./components/LoadingSpinner";
+import MovieCard from "./components/MovieCard";
 import Search from "./components/Search";
 import { API_OPTIONS, getUrl } from "./utils/helper";
-import MovieCard from "./components/MovieCard";
 import type { MovieProps } from "./utils/types";
-import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,11 +11,11 @@ function App() {
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (query: string) => {
     setIsLoading(true);
     setErrorMsg("");
     try {
-      const url = getUrl();
+      const url = getUrl(query);
       const response = await fetch(url, API_OPTIONS);
       if (!response.ok) {
         throw new Error("Failed to fetch movies");
@@ -36,8 +36,8 @@ function App() {
   };
 
   useEffect(() => {
-    fetchMovies();
-  }, []);
+    fetchMovies(searchQuery);
+  }, [searchQuery]);
 
   return (
     <main>
