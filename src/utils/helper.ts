@@ -12,3 +12,7 @@ export const API_OPTIONS = {
 export const getUrl = () => {
   return `${API_BASE_URL}/discover/movie?sory_by=popularity.desc`;
 };
+
+export const getPosterBaseURL = () => {
+  return "https://image.tmdb.org/t/p/w500";
+};
