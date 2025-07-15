@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
 import MovieCard from "./components/MovieCard";
 import Search from "./components/Search";
+import { useDebounce } from "./utils/customHook";
 import { API_OPTIONS, getUrl } from "./utils/helper";
 import type { MovieProps } from "./utils/types";
 
@@ -10,6 +11,8 @@ function App() {
   const [errorMsg, setErrorMsg] = useState("");
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const debouncedSearchQuery = useDebounce(searchQuery, 800);
+  const isFirstRender = useRef(true);
 
   const fetchMovies = async (query: string) => {
     setIsLoading(true);
@@ -17,15 +20,17 @@ function App() {
     try {
       const url = getUrl(query);
       const response = await fetch(url, API_OPTIONS);
-      if (!response.ok) {
-        throw new Error("Failed to fetch movies");
-      }
+
+      if (!response.ok) throw new Error("Failed to fetch movies");
+
       const data = await response.json();
+
       if (data.Response === "false") {
         setErrorMsg(data.Error || "Failed to fetch movies");
         setMovieList([]);
         return;
       }
+
       setMovieList(data.results || []);
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
@@ -34,10 +39,14 @@ function App() {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
-    fetchMovies(searchQuery);
-  }, [searchQuery]);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      fetchMovies("");
+      return;
+    }
+    fetchMovies(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
 
   return (
     <main>
