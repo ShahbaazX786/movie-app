@@ -1,4 +1,9 @@
+import { useState } from "react";
+import Search from "./components/Search";
+
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <main>
       <div className="pattern" />
@@ -9,7 +14,7 @@ function App() {
             Find <span className="text-gradient">Movies</span> You'll enjoy
             without the hassle
           </h1>
-          <p>Search</p>
+          <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </header>
       </div>
     </main>
