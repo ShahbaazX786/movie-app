@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Search from "./components/Search";
 import { API_OPTIONS, getUrl } from "./utils/helper";
+import MovieCard from "./components/MovieCard";
+import type { MovieProps } from "./utils/types";
 import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
@@ -25,7 +27,6 @@ function App() {
         return;
       }
       setMovieList(data.results || []);
-      console.log(data.results);
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
       setErrorMsg("Error fetching movies, Please try again later.");
@@ -52,19 +53,15 @@ function App() {
         </header>
 
         <section className="all-movies">
-          <h2>All movies</h2>
+          <h2 className="mt-[40px]">All movies</h2>
           {isLoading ? (
-            <p className="text-white">
-              <LoadingSpinner />
-            </p>
+            <LoadingSpinner />
           ) : errorMsg ? (
             <p className="text-red-500">{errorMsg}</p>
           ) : (
             <ul>
-              {movieList.map((movie) => (
-                <p key={movie.id} className="text-white">
-                  {movie.title}
-                </p>
+              {movieList.map((movie: MovieProps) => (
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
